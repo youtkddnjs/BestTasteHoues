@@ -10,6 +10,9 @@ import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.Marker
 import mhha.sample.besttastehoues.databinding.ActivityMainBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {//class MainActivity : AppCompatActivity()
 
@@ -27,6 +30,16 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {//class MainActivi
 
         binding.mapView.getMapAsync(this)
 
+        SearchRepository.getBestTasteHouse("서울").enqueue(object : Callback<SearchResult>{
+            override fun onResponse(call: Call<SearchResult>, response: Response<SearchResult>) {
+                Log.d("response", "${response.body().toString()}")
+            }
+
+            override fun onFailure(call: Call<SearchResult>, t: Throwable) {
+                t.printStackTrace()
+            }
+
+        })
 
 
     }//override fun onCreate(savedInstanceState: Bundle?)
