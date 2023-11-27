@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "mhha.sample.besttastehoues"
+    namespace = "mhha.sample.besttastehouse"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "mhha.sample.besttastehoues"
+        applicationId = "mhha.sample.besttastehouse"
         minSdk = 24
         targetSdk = 33
         versionCode = 1

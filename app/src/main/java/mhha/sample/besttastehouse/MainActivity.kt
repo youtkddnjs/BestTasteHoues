@@ -1,15 +1,14 @@
-package mhha.sample.besttastehoues
+package mhha.sample.besttastehouse
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.naver.maps.geometry.LatLng
-import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.Marker
-import mhha.sample.besttastehoues.databinding.ActivityMainBinding
+import mhha.sample.besttastehouse.databinding.ActivityMainBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

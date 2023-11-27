@@ -1,4 +1,4 @@
-package mhha.sample.besttastehoues
+package mhha.sample.besttastehouse
 
 
 import com.squareup.moshi.Moshi

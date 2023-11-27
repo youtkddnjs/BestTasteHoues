@@ -1,4 +1,4 @@
-package mhha.sample.besttastehoues
+package mhha.sample.besttastehouse
 
 import retrofit2.Call
 import retrofit2.http.GET
