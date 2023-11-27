@@ -3,8 +3,12 @@ package mhha.sample.besttastehoues
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.CameraAnimation
+import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
+import com.naver.maps.map.overlay.Marker
 import mhha.sample.besttastehoues.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {//class MainActivity : AppCompatActivity()
@@ -74,8 +78,21 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {//class MainActivi
         //nvaerMap 초기화
         naverMap = mapObject
         isMapInit = true
-        
 
-    }
+        //카메라 이동
+        val cameraUpdate = CameraUpdate.scrollTo(LatLng(37.5666102, 126.9783881))
+        naverMap.moveCamera(cameraUpdate)
 
-}
+        //카메라 이동 시 애니메이션
+//        val cameraUpdate = CameraUpdate.scrollTo(LatLng(37.5666102, 126.9783881))
+//            .animate(CameraAnimation.Easing)
+//        naverMap.moveCamera(cameraUpdate)
+
+        //마커
+        val marker = Marker()
+        marker.position = LatLng(37.5670135, 126.9783740)
+        marker.map = naverMap
+
+    }//override fun onMapReady(mapObject: NaverMap)
+
+}//class MainActivity : AppCompatActivity(), OnMapReadyCallback
