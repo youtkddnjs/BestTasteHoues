@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.geometry.Tm128
 import com.naver.maps.map.CameraAnimation
@@ -24,6 +25,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {//class MainActivi
     //naverMap 이 초기화 하지 않고 사용 하면 안되기 때문에 아래 코드가 필요함.
     private var isMapInit = false
 
+    private var bestTasteHouseAdapter = BestTasteHouseListAdapter{
+        //카메라 움직임
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -32,6 +37,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {//class MainActivi
         binding.mapView.onCreate(savedInstanceState)
 
         binding.mapView.getMapAsync(this)
+
+        binding.bottomSheetLayout.searchResultRecyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = bestTasteHouseAdapter
+        }
 
         binding.searchView.setOnQueryTextListener(object : OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -56,10 +66,19 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {//class MainActivi
                                 Log.d("xy", "${latLng.run { latitude }}, ${latLng.run { longitude }}")
                                 Marker(LatLng(37.56701355670135, 126.9783740)).apply {
                                     captionText = it.title
-                                    map =naverMap
+                                    map = naverMap
                                 }
                             }
 
+                            bestTasteHouseAdapter.setData(searchItemList)
+
+                            bestTasteHouseAdapter.notifyItemChanged(0, searchItemList.size)
+
+                            // 아래 코드는 전체를 바꾸기 때문에 큰 데이터에서 효율적이지 못함.
+                            // diffUtil을 이용해서 sameItem, sameContent 비교하여 변경하는 것이 효율적
+//                            bestTasteHouseAdapter.notifyDataSetChanged()
+
+                            //카메라 이동
                             val cameraUpdate = CameraUpdate.scrollTo(markets.first().position)
                                 .animate(CameraAnimation.Easing)
                             naverMap.moveCamera(cameraUpdate)
