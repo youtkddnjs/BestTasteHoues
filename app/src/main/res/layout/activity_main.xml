@@ -10,5 +10,13 @@
         android:id="@+id/map_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+    
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
