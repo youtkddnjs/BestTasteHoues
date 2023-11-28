@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.geometry.Tm128
 import com.naver.maps.map.CameraAnimation
@@ -14,6 +15,7 @@ import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.Marker
 import mhha.sample.besttastehouse.databinding.ActivityMainBinding
+import mhha.sample.besttastehouse.databinding.BottomSheetBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,8 +28,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {//class MainActivi
     private var isMapInit = false
 
     private var bestTasteHouseAdapter = BestTasteHouseListAdapter{
-        //카메라 움직임
-        moveCamera(it)
+
+        collapseBottomSheet()
+        moveCamera(it) //카메라 움직임
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,6 +77,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {//class MainActivi
                             bestTasteHouseAdapter.setData(searchItemList)
 
                             bestTasteHouseAdapter.notifyItemChanged(0, searchItemList.size)
+                            collapseBottomSheet()
                             moveCamera(markers.first().position)
 
                             // 아래 코드는 전체를 바꾸기 때문에 큰 데이터에서 효율적이지 못함.
@@ -107,6 +111,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {//class MainActivi
         val cameraUpdate = CameraUpdate.scrollTo(position)
             .animate(CameraAnimation.Easing)
         naverMap.moveCamera(cameraUpdate)
+    }
+
+    private fun collapseBottomSheet(){
+        val bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetLayout.root)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
     override fun onStart() {
