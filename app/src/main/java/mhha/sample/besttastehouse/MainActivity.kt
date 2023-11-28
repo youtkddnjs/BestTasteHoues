@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {//class MainActivi
 
     private var bestTasteHouseAdapter = BestTasteHouseListAdapter{
         //카메라 움직임
+        moveCamera(it)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,7 +60,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {//class MainActivi
                                 return
                             }
 
-                            val markets = searchItemList.map {
+                            val markers = searchItemList.map {
                                 //todo : tm128이 정상 작동하지 않으므로 원인을 찾아 수정 할 것.
                                 val tm128 = Tm128(it.mapx.toDouble(),it.mapy.toDouble())
                                 val latLng = tm128.toLatLng()
@@ -73,16 +74,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {//class MainActivi
                             bestTasteHouseAdapter.setData(searchItemList)
 
                             bestTasteHouseAdapter.notifyItemChanged(0, searchItemList.size)
+                            moveCamera(markers.first().position)
 
                             // 아래 코드는 전체를 바꾸기 때문에 큰 데이터에서 효율적이지 못함.
                             // diffUtil을 이용해서 sameItem, sameContent 비교하여 변경하는 것이 효율적
 //                            bestTasteHouseAdapter.notifyDataSetChanged()
-
-                            //카메라 이동
-                            val cameraUpdate = CameraUpdate.scrollTo(markets.first().position)
-                                .animate(CameraAnimation.Easing)
-                            naverMap.moveCamera(cameraUpdate)
-
 
                         }//override fun onResponse(call: Call<SearchResult>, response: Response<SearchResult>)
 
@@ -102,9 +98,16 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {//class MainActivi
 
         })//binding.searchView.setOnQueryTextListener(object : OnQueryTextListener
 
-
-
     }//override fun onCreate(savedInstanceState: Bundle?)
+
+    private fun moveCamera(position: LatLng){
+        if(!isMapInit){return} //에외처리
+
+        //카메라 이동
+        val cameraUpdate = CameraUpdate.scrollTo(position)
+            .animate(CameraAnimation.Easing)
+        naverMap.moveCamera(cameraUpdate)
+    }
 
     override fun onStart() {
         super.onStart()
