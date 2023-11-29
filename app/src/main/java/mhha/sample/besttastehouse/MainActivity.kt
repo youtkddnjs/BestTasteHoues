@@ -30,8 +30,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {//class MainActivi
     private var bestTasteHouseAdapter = BestTasteHouseListAdapter{
 
         collapseBottomSheet()
-        moveCamera(it) //카메라 움직임
+        moveCamera(it, 18.0) //카메라 움직임
     }
+
+    private var markers = emptyList<Marker>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +65,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {//class MainActivi
                                 return
                             }
 
-                            val markers = searchItemList.map {
+                            //마커 삭제
+                            markers.forEach {
+                                it.map = null
+                            }
+
+                            markers = searchItemList.map {
                                 //todo : tm128이 정상 작동하지 않으므로 원인을 찾아 수정 할 것.
                                 val tm128 = Tm128(it.mapx.toDouble(),it.mapy.toDouble())
                                 val latLng = tm128.toLatLng()
@@ -78,7 +85,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {//class MainActivi
 
                             bestTasteHouseAdapter.notifyItemChanged(0, searchItemList.size)
                             collapseBottomSheet()
-                            moveCamera(markers.first().position)
+                            moveCamera(markers.first().position, 10.0)
 
                             // 아래 코드는 전체를 바꾸기 때문에 큰 데이터에서 효율적이지 못함.
                             // diffUtil을 이용해서 sameItem, sameContent 비교하여 변경하는 것이 효율적
@@ -104,11 +111,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {//class MainActivi
 
     }//override fun onCreate(savedInstanceState: Bundle?)
 
-    private fun moveCamera(position: LatLng){
+    private fun moveCamera(position: LatLng, zoomLevel: Double){
         if(!isMapInit){return} //에외처리
 
         //카메라 이동
-        val cameraUpdate = CameraUpdate.scrollTo(position)
+        val cameraUpdate = CameraUpdate.scrollAndZoomTo(position, zoomLevel)
             .animate(CameraAnimation.Easing)
         naverMap.moveCamera(cameraUpdate)
     }
